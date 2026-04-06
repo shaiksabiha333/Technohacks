@@ -1,28 +1,60 @@
-// script.js
-async function getWeather() {
-  const city = document.getElementById("cityInput").value;
-  const apiKey = "2675de535bc3fbef45a810958e0e5049"; // Replace with your OpenWeatherMap API key
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+const form = document.getElementById('itemForm');
+const input = document.getElementById('itemInput');
+const list = document.getElementById('itemList');
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("City not found");
-    }
-    const data = await response.json();
-    displayWeather(data);
-  } catch (error) {
-    document.getElementById("weatherResult").innerHTML = `<p>${error.message}</p>`;
-  }
+// Fetch items from server
+async function fetchItems() {
+  const res = await fetch('/items');
+  const items = await res.json();
+  list.innerHTML = '';
+
+  items.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item.name;
+
+    // Update button
+    const updateBtn = document.createElement('button');
+    updateBtn.textContent = 'Update';
+    updateBtn.className = 'update';
+    updateBtn.onclick = async () => {
+      const newName = prompt('Enter new name:', item.name);
+      if (newName) {
+        await fetch(`/items/${item.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newName })
+        });
+        fetchItems();
+      }
+    };
+
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.className = 'delete';
+    deleteBtn.onclick = async () => {
+      await fetch(`/items/${item.id}`, { method: 'DELETE' });
+      fetchItems();
+    };
+
+    // Append buttons next to item
+    li.appendChild(updateBtn);
+    li.appendChild(deleteBtn);
+    list.appendChild(li);
+  });
 }
 
-function displayWeather(data) {
-  const weatherDiv = document.getElementById("weatherResult");
-  weatherDiv.innerHTML = `
-    <h2>${data.name}, ${data.sys.country}</h2>
-    <p>🌡 Temperature: ${data.main.temp} °C</p>
-    <p>☁ Condition: ${data.weather[0].description}</p>
-    <p>💨 Wind Speed: ${data.wind.speed} m/s</p>
-    <p>💧 Humidity: ${data.main.humidity}%</p>
-  `;
-}
+// Handle form submission
+form.onsubmit = async (e) => {
+  e.preventDefault();
+  await fetch('/items', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: input.value })
+  });
+  input.value = '';
+  fetchItems();
+};
+
+// Initial load
+fetchItems();
