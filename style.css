@@ -1,27 +1,43 @@
-li {
-  margin: 5px 0;
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #74ebd5, #ACB6E5);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-li button {
-  margin-left: 10px;
-  padding: 5px 10px;
+.weather-app {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 15px;
+  background: #4CAF50;
+  color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
 }
 
-/* Update button style */
-li button.update {
-  background-color: #4CAF50; /* green */
-  color: white;
+button:hover {
+  background: #45a049;
 }
 
-/* Delete button style */
-li button.delete {
-  background-color: #f44336; /* red */
-  color: white;
+#weatherResult {
+  margin-top: 20px;
+  font-size: 18px;
 }
