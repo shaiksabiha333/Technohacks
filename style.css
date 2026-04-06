@@ -1,0 +1,27 @@
+li {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Update button style */
+li button.update {
+  background-color: #4CAF50; /* green */
+  color: white;
+}
+
+/* Delete button style */
+li button.delete {
+  background-color: #f44336; /* red */
+  color: white;
+}
